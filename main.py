@@ -1,41 +1,54 @@
 import flet as ft
+import os
+import subprocess
 
+# --- الجزء 1: الدوال اللي كتبتها أنت (المخ) ---
+def decompile_apk(apk_path):
+    return f"جاري تفكيك: {apk_path}"
+
+def link_sniper(url):
+    return f"جاري فحص الرابط: {url}"
+
+# --- الجزء 2: الواجهة (الأزرار والربط) ---
 def main(page: ft.Page):
-    page.title = "Tayeb-Link"
+    page.title = "TAYEB-LINK V2.1"
     page.theme_mode = ft.ThemeMode.DARK
-    page.scroll = "auto"
+    page.window_width = 400
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    # رسالة ترحيب زرقاء عند التشغيل
-    def show_welcome():
-        page.snack_bar = ft.SnackBar(
-            content=ft.Text("مرحباً بك في Tayeb-Link! حافظ على هذا الهاتف 🛡️", color="white"),
-            bgcolor="blue",
-        )
-        page.snack_bar.open = True
+    # صندوق النصوص (اللي تظهر فيه النتائج)
+    log_text = ft.Text("أنا جاهز للتطوير يا شريكي.. هاني واش تحب تدير؟", color="green", text_align="center")
+
+    # واش يصرى كي تضغط على الأزرار
+    def on_sniper_click(e):
+        log_text.value = link_sniper("الرابط المكتشف") # هنا نعيطو للدالة تاعك
         page.update()
 
-    chat_list = ft.ListView(expand=True, spacing=10)
-    message_input = ft.TextField(hint_text="اكتب رسالتك هنا...", expand=True, border_color="blue")
-    
-    def send_click(e):
-        if message_input.value:
-            chat_list.controls.append(
-                ft.Container(
-                    content=ft.Text(f"أنا: {message_input.value}", color="white"),
-                    padding=10, bgcolor="blue", border_radius=10
-                )
-            )
-            message_input.value = ""
-            page.update()
+    def on_decompile_click(e):
+        log_text.value = decompile_apk("file.apk") # هنا نعيطو للدالة تاعك
+        page.update()
 
+    # تصميم الأزرار كيما الفوطو تاعك
+    btn_security = ft.ElevatedButton("فحص الأمان", bgcolor="green", color="black", width=160)
+    btn_decompile = ft.ElevatedButton("تفكيك APK", bgcolor="green", color="black", width=160, on_click=on_decompile_click)
+    btn_sniper = ft.ElevatedButton("🎯 قناص الروابط (Link Sniper)", bgcolor="red", color="white", width=330, on_click=on_sniper_click)
+
+    # إضافة العناصر للصفحة
     page.add(
-        ft.Text("Tayeb-Link Messenger", size=25, weight="bold", color="blue"),
-        chat_list,
-        ft.Row([
-            message_input,
-            ft.IconButton(icon=ft.icons.SEND, icon_color="blue", on_click=send_click)
-        ])
+        ft.Image(src="https://raw.githubusercontent.com/zrougtaib-boop/Tayeb-Link/main/logo.png", width=100), # إذا عندك لوقو
+        ft.Text("TAYEB-LINK V2.1", size=25, color="green", weight="bold"),
+        ft.Text("وضع القناص مفعل", size=12, color="grey"),
+        ft.Row([btn_security, btn_decompile], alignment=ft.MainAxisAlignment.CENTER),
+        ft.Row([btn_sniper], alignment=ft.MainAxisAlignment.CENTER),
+        ft.Container(
+            content=log_text,
+            padding=20,
+            border=ft.border.all(1, "green"),
+            border_radius=10,
+            width=350,
+            margin=ft.margin.only(top=20)
+        )
     )
-    show_welcome()
 
-ft.app(target=main)
+ft.app(tar
+       get=main)
