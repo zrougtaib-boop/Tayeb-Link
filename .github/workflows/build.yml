@@ -15,5 +15,12 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          buildozer android debu
-          g
+          # هنا صححنا الخطأ وزدنا حرف g في الأخير
+          buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tayeb-Link-v1
+          path: bin/*.
+          apk
